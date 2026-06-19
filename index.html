@@ -6,10 +6,14 @@
     <!-- SEO 核心标签 -->
     <title>AI接单提案生成器 | 设计师程序员一键生成竞标投标方案</title>
     <meta name="description" content="自由设计师、程序员上传作品集，30秒自动生成高转化竞标方案、项目报价与服务文稿，提升接包中标率，立即预约内测名额。">
+    <meta name="keywords" content="AI接单,提案生成,竞标方案,设计师接单,程序员接单,投标方案,自由职业工具">
     <!-- Open Graph 社交标签 -->
     <meta property="og:title" content="ProposeAI——设计师&程序员接单竞标提案一键自动生成">
     <meta property="og:description" content="上传作品集，30秒生成高转化投标方案，接单中标率直接翻倍">
     <meta property="og:type" content="website">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630/0070f3/ffffff?text=ProposeAI">
+    <!-- 防止移动端缩放 -->
+    <meta name="theme-color" content="#0070f3">
     <style>
         /* 全局重置 & 基础样式 无外部依赖 */
         * {
@@ -18,11 +22,28 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary-color: #0070f3;
+            --primary-hover: #0056b3;
+            --text-dark: #111827;
+            --text-medium: #4b5563;
+            --text-light: #6b7280;
+            --bg-light: #f9fafb;
+            --border-color: #f3f4f6;
+            --white: #ffffff;
+            --black: #111827;
+            --radius: 8px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans SC', sans-serif;
             line-height: 1.6;
-            color: #111827;
-            background-color: #ffffff;
+            color: var(--text-dark);
+            background-color: var(--white);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         /* 容器 居中布局 */
@@ -35,11 +56,13 @@
         /* 导航栏 */
         .navbar {
             padding: 20px 0;
-            border-bottom: 1px solid #f3f4f6;
+            border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
-            background: rgba(255,255,255,0.95);
-            z-index: 100;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 1000;
         }
 
         .nav-content {
@@ -51,27 +74,33 @@
         .logo {
             font-size: 24px;
             font-weight: 700;
-            color: #111827;
+            color: var(--primary-color);
+            text-decoration: none;
         }
 
         /* 按钮样式 Linear风格 */
         .btn {
             padding: 12px 24px;
-            border-radius: 6px;
+            border-radius: var(--radius);
             border: none;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: var(--transition);
             font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
         }
 
         .btn-primary {
-            background: #0070f3;
-            color: white;
+            background: var(--primary-color);
+            color: var(--white);
         }
 
         .btn-primary:hover {
-            background: #0056b3;
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
         }
 
         /* 区块通用样式 */
@@ -82,33 +111,35 @@
         /* Hero区 */
         .hero {
             text-align: center;
-            padding: 100px 0;
+            padding: 100px 0 80px;
         }
 
         .hero h1 {
-            font-size: 48px;
+            font-size: clamp(32px, 5vw, 48px);
             margin-bottom: 20px;
             line-height: 1.2;
+            font-weight: 700;
         }
 
         .hero p {
-            font-size: 20px;
-            color: #4b5563;
+            font-size: clamp(16px, 2.5vw, 20px);
+            color: var(--text-medium);
             max-width: 800px;
             margin: 0 auto 40px;
         }
 
         /* 标题通用 */
         .section-title {
-            font-size: 32px;
+            font-size: clamp(24px, 4vw, 32px);
             text-align: center;
             margin-bottom: 40px;
             line-height: 1.3;
+            font-weight: 700;
         }
 
         /* 痛点板块 */
         .pain-points {
-            background: #f9fafb;
+            background: var(--bg-light);
             border-radius: 12px;
             padding: 60px;
             margin: 40px 0;
@@ -118,50 +149,65 @@
             max-width: 900px;
             margin: 0 auto;
             font-size: 18px;
-            color: #374151;
+            color: var(--text-medium);
         }
 
         .pain-list p {
             margin-bottom: 16px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .pain-list p:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
         }
 
         .data-tip {
             margin-top: 20px;
             font-weight: 500;
-            color: #0070f3;
+            color: var(--primary-color);
+            font-size: 16px;
+            border-left: 3px solid var(--primary-color);
+            padding-left: 12px;
         }
 
         /* 核心功能区 网格布局 */
         .features {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
             margin-top: 40px;
         }
 
         .feature-card {
             padding: 30px;
-            border: 1px solid #f3f4f6;
+            border: 1px solid var(--border-color);
             border-radius: 12px;
-            transition: transform 0.2s;
+            transition: var(--transition);
+            background: var(--white);
         }
 
         .feature-card:hover {
             transform: translateY(-5px);
+            box-shadow: var(--shadow);
         }
 
         .feature-card h3 {
             font-size: 20px;
             margin-bottom: 16px;
+            color: var(--text-dark);
         }
 
         .feature-card p {
-            color: #4b5563;
+            color: var(--text-medium);
         }
 
         /* 场景&数据区 */
         .scene-data {
-            background: #f9fafb;
+            background: var(--bg-light);
             padding: 60px;
             border-radius: 12px;
         }
@@ -171,11 +217,24 @@
             font-size: 18px;
         }
 
+        .scene-list p {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .scene-list p:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+        }
+
         /* 邮箱订阅区 */
         .waitlist {
             text-align: center;
-            background: #111827;
-            color: white;
+            background: var(--black);
+            color: var(--white);
             padding: 80px 40px;
             border-radius: 12px;
             margin: 40px 0;
@@ -183,11 +242,13 @@
 
         .waitlist h2 {
             margin-bottom: 20px;
+            font-size: 32px;
         }
 
         .waitlist p {
             color: #d1d5db;
             margin-bottom: 30px;
+            font-size: 18px;
         }
 
         .form-group {
@@ -200,48 +261,128 @@
 
         input, select {
             padding: 14px;
-            border-radius: 6px;
-            border: none;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
             font-size: 16px;
+            background: var(--white);
+            color: var(--text-dark);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.1);
+        }
+
+        input::placeholder, select:invalid {
+            color: var(--text-light);
         }
 
         /* Footer */
         footer {
             padding: 40px 0;
             text-align: center;
-            border-top: 1px solid #f3f4f6;
-            color: #6b7280;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-light);
+        }
+
+        footer p {
+            margin-bottom: 8px;
+        }
+
+        /* 加载动画 */
+        .loading {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 成功提示 */
+        .success-message {
+            display: none;
+            background: #10b981;
+            color: white;
+            padding: 12px 20px;
+            border-radius: var(--radius);
+            margin-top: 20px;
+            text-align: center;
         }
 
         /* 响应式适配 移动端 */
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 32px;
+            section {
+                padding: 60px 0;
             }
-
-            .hero p {
-                font-size: 18px;
+            
+            .hero {
+                padding: 60px 0 40px;
             }
-
-            .features {
-                grid-template-columns: 1fr;
-            }
-
+            
             .pain-points, .scene-data {
                 padding: 30px 20px;
             }
-
-            .section-title {
-                font-size: 26px;
+            
+            .waitlist {
+                padding: 40px 20px;
+            }
+            
+            .waitlist h2 {
+                font-size: 24px;
+            }
+            
+            .pain-list, .scene-list {
+                font-size: 16px;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .feature-card {
+                padding: 20px;
+            }
+            
+            .btn {
+                width: 100%;
+                padding: 16px 24px;
+            }
+            
+            .form-group {
+                gap: 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .hero h1 {
+                font-size: 28px;
+            }
+            
+            .hero p {
+                font-size: 16px;
             }
         }
     </style>
 </head>
 <body>
     <!-- 导航栏 -->
-    <nav class="navbar">
+    <nav class="navbar" id="navbar">
         <div class="container nav-content">
-            <div class="logo">ProposeAI</div>
+            <a href="#" class="logo">ProposeAI</a>
             <button class="btn btn-primary" onclick="scrollToWaitlist()">加入内测</button>
         </div>
     </nav>
@@ -258,10 +399,10 @@
         <h2 class="section-title">90%自由从业者接单失败，不是技术不行，而是竞标文案拖后腿</h2>
         <div class="pain-points">
             <div class="pain-list">
-                <p>1. 拿到甲方需求，对着空白文档发呆两小时，不知道怎么包装自己的能力和服务价值；</p>
-                <p>2. 每次投标都复制粘贴旧模板，文案千篇一律，甲方一眼看出敷衍，毫无竞争力；</p>
-                <p>3. 设计师讲不清设计价值，程序员捋不清技术方案，报价没依据，经常被压价；</p>
-                <p>4. 白天赶项目改需求，深夜熬夜写方案做报价，投入大量时间，最后还大概率白忙活。</p>
+                <p>拿到甲方需求，对着空白文档发呆两小时，不知道怎么包装自己的能力和服务价值；</p>
+                <p>每次投标都复制粘贴旧模板，文案千篇一律，甲方一眼看出敷衍，毫无竞争力；</p>
+                <p>设计师讲不清设计价值，程序员捋不清技术方案，报价没依据，经常被压价；</p>
+                <p>白天赶项目改需求，深夜熬夜写方案做报价，投入大量时间，最后还大概率白忙活。</p>
                 <p class="data-tip">数据佐证：威客平台数据显示，普通竞标者单份方案撰写耗时超2小时，平均中标率不足20%；使用标准化高转化提案的从业者，中标率可提升35%以上。</p>
             </div>
         </div>
@@ -291,14 +432,14 @@
         <div class="scene-data">
             <h2 class="section-title">适用场景</h2>
             <div class="scene-list">
-                <p>1. 猪八戒、一品威客、程序员客栈等众包平台投标竞标</p>
-                <p>2. 私域对接企业客户，初次沟通的正式项目提案与报价</p>
-                <p>3. 品牌设计、UI定制、网站开发、小程序搭建等各类技能接单</p>
-                <p>4. 多项目批量投标，快速产出定制化竞标文稿</p>
+                <p>猪八戒、一品威客、程序员客栈等众包平台投标竞标</p>
+                <p>私域对接企业客户，初次沟通的正式项目提案与报价</p>
+                <p>品牌设计、UI定制、网站开发、小程序搭建等各类技能接单</p>
+                <p>多项目批量投标，快速产出定制化竞标文稿</p>
             </div>
 
             <h2 class="section-title">信任数据</h2>
-            <p style="text-align:center; font-size: 18px;">行业调研：2026年自由职业AI工具市场增速超40%，超六成接单从业者愿意按月订阅效率工具；<br>内测实测：使用提案生成工具后，单份方案撰写时间从2小时缩短至3分钟，用户平均中标率提升35%。</p>
+            <p style="text-align:center; font-size: 18px; color: var(--text-medium);">行业调研：2026年自由职业AI工具市场增速超40%，超六成接单从业者愿意按月订阅效率工具；<br>内测实测：使用提案生成工具后，单份方案撰写时间从2小时缩短至3分钟，用户平均中标率提升35%。</p>
         </div>
     </section>
 
@@ -308,15 +449,19 @@
             <h2>预约限量内测，抢先使用</h2>
             <p>填写邮箱，优先开通体验资格，前100名内测用户可永久领取全套自由职业竞标话术库。</p>
             <form class="form-group" id="waitlistForm">
-                <input type="email" placeholder="电子邮箱（必填）" required>
-                <select>
-                    <option value="">身份：设计师/程序员/其他自由职业（选填）</option>
+                <input type="email" placeholder="电子邮箱（必填）" required aria-label="电子邮箱">
+                <select aria-label="身份选择">
+                    <option value="" selected disabled>身份：设计师/程序员/其他自由职业（选填）</option>
                     <option value="designer">设计师</option>
                     <option value="programmer">程序员</option>
                     <option value="other">其他自由职业</option>
                 </select>
-                <input type="text" placeholder="平时接单平台（选填）">
-                <button type="submit" class="btn btn-primary">提交预约，等待内测开通通知</button>
+                <input type="text" placeholder="平时接单平台（选填）" aria-label="接单平台">
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <span id="submitText">提交预约，等待内测开通通知</span>
+                    <div class="loading" id="loadingSpinner"></div>
+                </button>
+                <div class="success-message" id="successMessage">预约成功！我们将尽快通过邮箱通知你内测资格~</div>
             </form>
         </div>
     </section>
@@ -332,14 +477,107 @@
     <script>
         // 平滑滚动到订阅区
         function scrollToWaitlist() {
-            document.getElementById('waitlist').scrollIntoView({ behavior: 'smooth' });
+            const waitlistSection = document.getElementById('waitlist');
+            waitlistSection.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'center'
+            });
         }
 
+        // 监听导航栏滚动
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                navbar.style.boxShadow = 'none';
+            }
+        });
+
         // 表单提交处理
-        document.getElementById('waitlistForm').addEventListener('submit', function(e) {
+        document.getElementById('waitlistForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            alert('预约成功！我们将尽快通过邮箱通知你内测资格~');
-            this.reset();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const submitText = document.getElementById('submitText');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const successMessage = document.getElementById('successMessage');
+            const form = e.target;
+            
+            // 获取表单数据
+            const formData = {
+                email: form.querySelector('input[type="email"]').value,
+                role: form.querySelector('select').value,
+                platform: form.querySelector('input[type="text"]').value,
+                timestamp: new Date().toISOString()
+            };
+            
+            // 显示加载状态
+            submitBtn.disabled = true;
+            submitText.style.display = 'none';
+            loadingSpinner.style.display = 'block';
+            
+            try {
+                // 模拟API调用（实际使用时替换为真实API）
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // 存储到本地存储（实际应用中应该发送到服务器）
+                const submissions = JSON.parse(localStorage.getItem('proposeai_submissions') || '[]');
+                submissions.push(formData);
+                localStorage.setItem('proposeai_submissions', JSON.stringify(submissions));
+                
+                // 显示成功消息
+                successMessage.style.display = 'block';
+                form.reset();
+                
+                // 3秒后重置表单状态
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 3000);
+                
+            } catch (error) {
+                alert('提交失败，请稍后重试');
+                console.error('Form submission error:', error);
+            } finally {
+                // 重置按钮状态
+                submitBtn.disabled = false;
+                submitText.style.display = 'block';
+                loadingSpinner.style.display = 'none';
+            }
+        });
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 添加平滑滚动到所有内部链接
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // 初始化表单验证
+            const emailInput = document.querySelector('input[type="email"]');
+            emailInput.addEventListener('blur', function() {
+                if (!this.validity.valid) {
+                    this.style.borderColor = '#ef4444';
+                } else {
+                    this.style.borderColor = '';
+                }
+            });
+            
+            // 控制台欢迎信息
+            console.log('%c🚀 ProposeAI 内测页面已加载', 'color: #0070f3; font-size: 16px; font-weight: bold;');
+            console.log('%c💡 这是一个AI接单提案生成器的演示页面', 'color: #4b5563;');
         });
     </script>
 </body>
